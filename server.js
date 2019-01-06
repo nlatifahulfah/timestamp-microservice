@@ -24,7 +24,19 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-
+// Timestamp microservice
+app.get("/api/timestamp/:datestring?", function(req, res) {
+  var d = new Date(req.params.datestring)
+  if (req.params.datestring == null) { // empty it should be equivalent to trigger new Date()
+    d = new Date()
+    res.json({"unix": d.getTime(), "utc" : d.toUTCString() })
+  } else if (d) { // valid return {"unix": <date.getTime()>, "utc" : <date.toUTCString()> }
+    res.json({"unix": d.getTime(), "utc" : d.toUTCString() })
+  } else {
+    res.json({"unix": null, "utc" : "Invalid Date" })
+  }
+  
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
